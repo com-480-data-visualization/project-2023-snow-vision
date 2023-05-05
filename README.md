@@ -6,14 +6,14 @@
 | David Benedikt Heye | 344184 |
 | Simone Roznowicz    | 342864 |
 
-[Milestone 1](#milestone-1-23rd-april-5pm) • [Milestone
-2](#milestone-2) • [Milestone 3](#milestone-3)
+[Milestone 1](#milestone-1-7th-april-5pm) • [Milestone
+2](#milestone-2-7th-may-5pm) • [Milestone 3](#milestone-3)
 
 Unfortunately, our dataset is too large to be uploaded on GitHub.  We
 therefore provide it
 [here](https://drive.google.com/drive/folders/1dbQMLpdP1ELydWlzE0RpUYygnAP4FNyu).
 
-## Milestone 1 (23rd April, 5pm)
+## Milestone 1 (7th April, 5pm)
 
 **10% of the final grade**
 
@@ -194,6 +194,14 @@ lines](Exploration/plots/3d_topographic_map.jpg)
 
 **10% of the final grade**
 
+Please refer to [`Milestone_2.pdf`](Milestone_2.pdf) for the document
+for milestone 2.
+
+Please refer to [`Website/`](Website/) for the skeleton of our
+website.  To allow D3 to load data, you must run a local webserver,
+e.g., by using `python3 -m http.server PORT` and connecting to
+`http://localhost:PORT/`.  This is, in particular, relevant for
+viewing [Website/map.html](Website/map.html).
 
 ## Milestone 3 (4th June, 5pm)
 

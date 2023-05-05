@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Snow Vision</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="uikit/css/uikit.min.css" />
+        <link rel="stylesheet" href="style.css" />
+        <script src="uikit/js/uikit.min.js"></script>
+        <script src="uikit/js/uikit-icons.min.js"></script>
+    </head>
+
+    <body style="background: black;" class="uk-light">
+        <div id="snowvision-visualization"
+             class="uk-section uk-padding-remove uk-flex uk-flex-column"
+             uk-height-viewport>
+            <div class="">
+                <form class="uk-grid-small" uk-grid>
+                    <div class="uk-width-expand uk-flex uk-flex-middle snowvision-visibility-voronoi">
+                        <input class="uk-range" type="range">
+                    </div>
+                    
+                    <div class="uk-flex uk-flex-middle snowvision-visibility-voronoi">
+                        <div class="uk-form-controls">
+                            <select class="uk-select" id="form-stacked-select">
+                                <option>January</option>
+                                <option>February</option>
+                                <option>...</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="uk-flex uk-flex-middle snowvision-visibility-voronoi">
+                        <div class="uk-form-controls">
+                            <select class="uk-select" id="form-stacked-select">
+                                <option>1984</option>
+                                <option>1985</option>
+                                <option>...</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="uk-flex uk-flex-middle">
+                        <button class="uk-button uk-button-default"
+                                type="button"
+                                onclick="switch_state()">Switch</button>
+                    </div>
+                </form>
+            </div>
+            <div class="uk-flex uk-flex-column uk-flex-middle uk-text-center snowviz-flex-grow" id="snowvision-map-container">
+                <b id="snowvision-voronoi-here" class="snowvision-hide-voronoi">THE VORONOI MAP GOES HERE!</b>
+                <b id="snowvision-height-line-here" class="snowvision-hide-heightline">THE HEIGHT-LINE MAP GOES HERE!</b>
+                <b>USE THE BUTTON ON THE TOP RIGHT TO SWITCH THE MAP.</b>
+
+                <a class="uk-button uk-button-default"
+                   type="button"
+                   href="station_view.html">Imagine clicking on a station on the map</a>
+
+                <img src="img/map-117174.svg" width="100%" class="uk-margin uk-background-default snowvision-hide-voronoi">
+                <b class="snowvision-hide-voronoi">The voronoi map will draw an area around each station.  This area will be colored according to the snow depth at the respective station.  We will encode through colors whether there is a lot of snow.  By using the controls at the top of the page, the user can control what data is displayed, i.e., they can choose a year and a month and the map will then be colored according to the respective measurements.</b>
+                <img src="img/heightline.jpg" width="100%" class="uk-margin snowvision-hide-heightline">
+                <b class="snowvision-hide-heightline">This height-line map is used as the starting point.  The goal is that the user can pan it and see the exact location of each station as well as their elevation.  Realizing a 3D map gives the user a better understanding of the elevation of the station.  Using the <i>switch</i> button in the top right corner, one can switch to the more elaborate voronoi map.</b>
+            </div>
+        </div>
+
+        <script>
+         // Simulate an enum somehow .....
+         // Valid values are:
+         //   "height_line",
+         //   "voronoi"
+         let current_state = "voronoi"
+
+         switch_state()
+
+         function switch_state() {
+             const heightline_hide_elements = document.querySelectorAll(".snowvision-hide-heightline")
+             const heightline_visibility_elements = document.querySelectorAll(".snowvision-visibility-heightline")
+             const voronoi_hide_elements = document.querySelectorAll(".snowvision-hide-voronoi")
+             const voronoi_visibility_elements = document.querySelectorAll(".snowvision-visibility-voronoi")
+             
+             if(current_state == "height_line") {
+                 heightline_hide_elements.forEach(e => {
+                     e.setAttribute("hidden", "")
+                 })
+
+                 heightline_visibility_elements.forEach(e => {
+                     e.classList.add("uk-invisible")
+                 })
+
+                 voronoi_hide_elements.forEach(e => {
+                     e.removeAttribute("hidden")
+                 })
+
+                 voronoi_visibility_elements.forEach(e => {
+                     e.classList.remove("uk-invisible")
+                 })
+
+                 current_state = "voronoi"
+             } else if (current_state == "voronoi") {
+                 heightline_hide_elements.forEach(e => {
+                     e.removeAttribute("hidden")
+                 })
+
+                 heightline_visibility_elements.forEach(e => {
+                     e.classList.remove("uk-invisible")
+                 })
+
+                 voronoi_hide_elements.forEach(e => {
+                     e.setAttribute("hidden", "")
+                 })
+
+                 voronoi_visibility_elements.forEach(e => {
+                     e.classList.add("uk-invisible")
+                 })
+
+                 current_state = "height_line"
+             }
+         }
+
+         function open_station_info() {
+             
+         }
+        </script>
+    </body>
+</html>
