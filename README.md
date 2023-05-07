@@ -201,7 +201,10 @@ Please refer to [`Website/`](Website/) for the skeleton of our
 website.  To allow D3 to load data, you must run a local webserver,
 e.g., by using `python3 -m http.server PORT` and connecting to
 `http://localhost:PORT/`.  This is, in particular, relevant for
-viewing [Website/map.html](Website/map.html).
+viewing [Website/Map/map.html](Website/Map/map.html).
+
+A preview of the current state of the site is available at
+[https://com-480-data-visualization.github.io/project-2023-snow-vision/Website/](https://com-480-data-visualization.github.io/project-2023-snow-vision/Website/).
 
 ## Milestone 3 (4th June, 5pm)
 

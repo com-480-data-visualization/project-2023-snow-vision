@@ -47,7 +47,7 @@ function draw_map() {
 }
 
 function scatter_stations() {    
-    d3.csv("locations.csv").then(function(data, error) {
+    d3.csv("../locations.csv").then(function(data, error) {
         if (error)
             throw error
 

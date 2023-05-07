@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang ="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<link rel=”stylesheet” type=”text/css” href=”csvtable.css” title=”style” /> <script type=”text/javascript” src=”js/jquery-1.4.2.min.js”></script> <script type=”text/javascript” src=”js/jquery.csvToTable.js”></script> <script type=”text/javascript” src=”js/jquery.tablesorter.dev.js”></script>
+
+<body>
+
+<canvas id="radialPlot" width="400" height="400"></canvas>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>"
+<script>
+    var docChart = document.getElementById("radialPlot");
+    var radialPlot = new Chart(docChart, {
+        type: 'radar',
+        data: {
+            labels: ["January","February","March","April","May","June","July","August","September","October","November","December"],
+            datasets: [{
+                label: 'Snow depth',
+                data: [10,19,34,10,32,170,40,20,65,99,130,180],
+                backgroundColor: 'rgba(255,99,132,0.2)',
+                borderColor: [
+                    'rgba(255,99,132,1)'
+                ],
+                borderWidth: 4
+            }]
+        },
+    });
+</script>
+
+</body>
+</html>
+
+
