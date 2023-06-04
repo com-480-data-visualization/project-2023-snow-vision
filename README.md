@@ -216,6 +216,8 @@ For our visualization, please refer to the
 For our process book, please refer to
 [`ProcessBook.pdf`](ProcessBook.pdf).
 
+For our screencast, please refer to [https://drive.google.com/drive/folders/1tz_Y8XNO1TmR3v-emRdsDm8fFHGXze8G](https://drive.google.com/drive/folders/1tz_Y8XNO1TmR3v-emRdsDm8fFHGXze8G)
+
 ## Late policy
 
 - < 24h: 80% of the grade for the milestone
