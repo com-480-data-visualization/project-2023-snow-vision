@@ -9,6 +9,22 @@
         <link rel="stylesheet" href="style.css" />
         <script src="uikit/js/uikit.min.js"></script>
         <script src="uikit/js/uikit-icons.min.js"></script>
+        <link href="fontawesome-free-6.4.0-web/css/fontawesome.css" rel="stylesheet">
+        <link href="fontawesome-free-6.4.0-web/css/solid.css" rel="stylesheet">
+        
+        <script src="d3/package/dist/d3.js"></script>
+
+        <script>
+         const start_year = 1964,
+               start_month = 1,
+               end_year = 2020
+        </script>
+
+        <style>
+         body {
+             overflow: hidden;
+         }
+        </style>
     </head>
 
     <body style="background: black;" class="uk-light">
@@ -17,110 +33,642 @@
              uk-height-viewport>
             <div class="">
                 <form class="uk-grid-small" uk-grid>
-                    <div class="uk-width-expand uk-flex uk-flex-middle snowvision-visibility-voronoi">
-                        <input class="uk-range" type="range">
+                    <div class="uk-flex uk-flex-middle">
+                        <a class="uk-button uk-button-default"
+                           type="button"
+                           href="index.html">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </a>
                     </div>
                     
-                    <div class="uk-flex uk-flex-middle snowvision-visibility-voronoi">
+                    <div class="uk-width-expand uk-flex uk-flex-middle">
+                        <input class="uk-range" type="range" value="0" min="0" max="671" id="snowvision-range-selector" oninput="update_from_range()">
+                    </div>
+                    
+                    <div class="uk-flex uk-flex-middle">
                         <div class="uk-form-controls">
-                            <select class="uk-select" id="form-stacked-select">
-                                <option>January</option>
-                                <option>February</option>
-                                <option>...</option>
+                            <select class="uk-select" id="snowvision-select-month">
+                                <option value="1" id="snowvision-select-1" onclick="set_month(1)">January</option>
+                                <option value="2" id="snowvision-select-2" onclick="set_month(2)">February</option>
+                                <option value="3" id="snowvision-select-3" onclick="set_month(3)">March</option>
+                                <option value="4" id="snowvision-select-4" onclick="set_month(4)">April</option>
+                                <option value="5" id="snowvision-select-5" onclick="set_month(5)">May</option>
+                                <option value="6" id="snowvision-select-6" onclick="set_month(6)">June</option>
+                                <option value="7" id="snowvision-select-7" onclick="set_month(7)">July</option>
+                                <option value="8" id="snowvision-select-8" onclick="set_month(8)">August</option>
+                                <option value="9" id="snowvision-select-9" onclick="set_month(9)">September</option>
+                                <option value="10" id="snowvision-select-10" onclick="set_month(10)">October</option>
+                                <option value="11" id="snowvision-select-11" onclick="set_month(11)">November</option>
+                                <option value="12" id="snowvision-select-12" onclick="set_month(12)">December</option>
                             </select>
                         </div>
                     </div>
 
-                    <div class="uk-flex uk-flex-middle snowvision-visibility-voronoi">
+                    <div class="uk-flex uk-flex-middle">
                         <div class="uk-form-controls">
-                            <select class="uk-select" id="form-stacked-select">
-                                <option>1984</option>
-                                <option>1985</option>
-                                <option>...</option>
+                            <select class="uk-select" id="snowvision-select-year">
                             </select>
                         </div>
                     </div>
 
                     <div class="uk-flex uk-flex-middle">
                         <button class="uk-button uk-button-default"
+                                id="snowvision-voronoi-play-button"
                                 type="button"
-                                onclick="switch_state()">Switch</button>
+                                onclick="play_pause()">
+                            <i class="fa-solid fa-play" id="snowvision-voronoi-play-icon"></i>
+                        </button>
+                    </div>
+
+                    <div class="uk-flex uk-flex-middle">
+                        <button class="uk-button uk-button-default"
+                                id="snowvision-voronoi-compare-button"
+                                onclick="start_compare()"
+                                type="button">
+                            <i class="fa-solid fa-code-compare"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="uk-flex uk-flex-middle">
+                        <button class="uk-button uk-button-default"
+                                id="snowvision-voronoi-help-button"
+                                type="button"
+                                uk-toggle="target: #snowvision-story-modal">
+                            <i class="fa-solid fa-question-circle"></i>
+                        </button>
+                    </div>
+
+                    <div class="uk-flex uk-flex-middle">
+                        <button class="uk-button uk-button-default"
+                                id="snowvision-voronoi-help-button"
+                                type="button"
+                                uk-toggle="target: #snowvision-end-modal">
+                            <i class="fa-solid fa-flag-checkered"></i>
+                        </button>
                     </div>
                 </form>
             </div>
-            <div class="uk-flex uk-flex-column uk-flex-middle uk-text-center snowviz-flex-grow" id="snowvision-map-container">
-                <b id="snowvision-voronoi-here" class="snowvision-hide-voronoi">THE VORONOI MAP GOES HERE!</b>
-                <b id="snowvision-height-line-here" class="snowvision-hide-heightline">THE HEIGHT-LINE MAP GOES HERE!</b>
-                <b>USE THE BUTTON ON THE TOP RIGHT TO SWITCH THE MAP.</b>
+            <div class="uk-flex uk-flex-column uk-flex-middle uk-text-center snowviz-flex-grow" id="snowvision-voronoi-container">
+                <script src="Map/map_scatter.js"></script>
+            </div>
+        </div>
 
-                <a class="uk-button uk-button-default"
-                   type="button"
-                   href="station_view.html">Imagine clicking on a station on the map</a>
+        <div id="snowvision-loading-modal" class="uk-flex-top" uk-modal esc-close="false", bg-close="false">
+            <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical" style="background: dimgrey">
+                <p style="text-align: center">Loading the data.</p>
+            </div>
+        </div>
 
-                <img src="img/map-117174.svg" width="100%" class="uk-margin uk-background-default snowvision-hide-voronoi">
-                <b class="snowvision-hide-voronoi">The voronoi map will draw an area around each station.  This area will be colored according to the snow depth at the respective station.  We will encode through colors whether there is a lot of snow.  By using the controls at the top of the page, the user can control what data is displayed, i.e., they can choose a year and a month and the map will then be colored according to the respective measurements.</b>
-                <img src="img/heightline.jpg" width="100%" class="uk-margin snowvision-hide-heightline">
-                <b class="snowvision-hide-heightline">This height-line map is used as the starting point.  The goal is that the user can pan it and see the exact location of each station as well as their elevation.  Realizing a 3D map gives the user a better understanding of the elevation of the station.  Using the <i>switch</i> button in the top right corner, one can switch to the more elaborate voronoi map.</b>
+        <div id="snowvision-story-modal" class="uk-flex-top" uk-modal>
+            <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical" style="background: dimgrey">
+                <p>
+                    <h2>Snow Vision</h2>
+                    <p>Here you will see a map showing snow depth measured at various stations across the European Alps between 1964 and 2020.  Some stations do not have data available, those stations are marked gray.  Stations that measure a low snow depth (0 cm) are yellow, while stations measuring a higher depth are green to purple (>400 cm).</p>
+
+                    <div id="snowvision-color-legend" style="text-align: center">
+                        <script>
+                         let data = d3.range(0, 1, .01)
+
+                         let legend_width = 300,
+                             legend_height = 50
+
+                         // Define your scales
+                         var xScale = d3.scaleLinear()
+                                        .domain([0, data.length])
+                                        .range([0, legend_width]);
+
+                         var yScale = d3.scaleLinear()
+                                        .domain([0, 1])
+                                        .range([legend_height / 2, legend_height / 2]);
+
+                         let rects = d3.select("#snowvision-color-legend")
+                                       .append("svg")
+                                       .attr("width", legend_width)
+                                       .attr("height", legend_height)
+                                       .append("g")
+                                       .selectAll("rect")
+                                       .data(data)
+                                       .enter()
+                                       .append("rect")
+                                       .attr("x", d => { return d * legend_width })
+                                       .attr("y", d => { return 0 })
+                                       .attr("width", function(d) { return 3 })
+                                       .attr("height", function(d) { return legend_height })
+                                       .attr("fill", d => { return get_color(d * 400, "HSmean") })
+                        </script>
+                    </div>
+
+                    <p>Feel free to explore the development of snow depths over time.  Use the slider at the top and the selection boxes to select a point in time, or just let the animation run automatically by pressing the play <i class="fa-solid fa-play"></i>
+                        button!  To return to this message, simply press the <i class="fa-solid fa-question-circle"></i> button.  You may also compare the average monthly snow depth at two stations by first selecting the compare <i class="fa-solid fa-code-compare"></i> button
+                        and then selecting two stations on the map one
+                        after the other.  Once you are done, you may
+                        press the finish <i class="fa-solid fa-flag-checkered"></i> button.</p>
+
+                    <p>To see more details, press on any station on the map.</p>
+
+                    <p>We focus on the average monthly snow depth.  However, when clicking on a station, you will also see the maximum amount of snowfall in a month at that station, the maximum average snow depth in a month, and the maximum overall snow depth measured at that station.  All depths are measured in centimeters.</p>
+                </p>
+
+                <button class="uk-button uk-button-default uk-modal-close" type="button">Close</button>
+            </div>
+        </div>
+
+        <div id="snowvision-end-modal" class="uk-flex-top" uk-modal>
+            <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical" style="background: dimgrey">
+                <p style="text-align: center">
+                    <h2>Thank you!</h2>
+                    <p>Thank you for studying our visualization.  What were you able to see?  The snow depth in the European Alps is slowly shrinking each year.  Only at 15% of the stations, snow depth has been increasing between 1970 and 2019.  At the remaining 85% of the stations, the depth is decreasing.  In the long run, this will have tragic effects on climate change and global warming.</p>
+
+                    <p>Do you want to learn more?  Our data comes from <a href="https://doi.org/10.5194/tc-15-1343-2021">https://doi.org/10.5194/tc-15-1343-2021</a>.  Here, Michael Matiu et al. thoroughly analyze the dataset and give more scientific insights.</p>
+                </p>
+
+                <button class="uk-button uk-button-default uk-modal-close" type="button">Close</button>
+            </div>
+        </div>
+
+        <div id="snowvision-station-view-modal" class="uk-modal-full" uk-modal uk-height-viewport>
+            <div class="uk-modal-dialog" style="background: black" uk-overflow-auto>
+                <a class="uk-modal-close-full uk-close-large" style="background: black" type="button" uk-close></a>
+                <div id="snowvision-station-view"
+                     class="uk-section uk-flex uk-flex-column"
+                     uk-height-viewport>
+                    <h1 class="uk-width-1-1 uk-text-center"><span id="snowvision-station-name">Station Name</span></h1>
+                    <div class="uk-grid-small uk-padding" uk-grid>                        
+                        <div class="uk-width-1-2">
+                            <table class="uk-table uk-table-divider">
+                                <caption>Station information</caption>
+                                <tbody>
+                                    <tr>
+                                        <th class="uk-table-shrink">Country</th>
+                                        <td class="uk-table-expand"><span id="snowvision-country-name"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Data provider</th>
+                                        <td><span id="snowvision-provider-name"</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Elevation</th>
+                                        <td><span id="snowvision-station-elevation"</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Latitude</th>
+                                        <td><span id="snowvision-station-latitude"</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Longitude</th>
+                                        <td><span id="snowvision-station-longitude"></span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="uk-width-1-2">
+                            <div style="" class="uk-height-1-1 uk-margin-auto-vertical uk-flex uk-flex-middle uk-flex-column snowviz-flex-grow" id="bar_plot">
+                                <script src="Bar/bar.js"></script>
+                            </div>
+                        </div>
+                        
+                        <div class="uk-width-1-1">
+                            <div class="">
+                                <form class="uk-grid-small" uk-grid>
+                                    <div class="uk-width-expand uk-flex uk-flex-middle">
+                                        <input class="uk-range" type="range" value="0" min="0" max="671" id="snowvision-radar-range-selector" oninput="update_radar_from_range()">
+                                    </div>
+                                    
+                                    <div class="uk-flex uk-flex-middle">
+                                        <div class="uk-form-controls">
+                                            <select class="uk-select" id="snowvision-radar-select-month">
+                                                <option value="1" id="snowvision-radar-select-1" onclick="set_radar_month(1)">January</option>
+                                                <option value="2" id="snowvision-radar-select-2" onclick="set_radar_month(2)">February</option>
+                                                <option value="3" id="snowvision-radar-select-3" onclick="set_radar_month(3)">March</option>
+                                                <option value="4" id="snowvision-radar-select-4" onclick="set_radar_month(4)">April</option>
+                                                <option value="5" id="snowvision-radar-select-5" onclick="set_radar_month(5)">May</option>
+                                                <option value="6" id="snowvision-radar-select-6" onclick="set_radar_month(6)">June</option>
+                                                <option value="7" id="snowvision-radar-select-7" onclick="set_radar_month(7)">July</option>
+                                                <option value="8" id="snowvision-radar-select-8" onclick="set_radar_month(8)">August</option>
+                                                <option value="9" id="snowvision-radar-select-9" onclick="set_radar_month(9)">September</option>
+                                                <option value="10" id="snowvision-radar-select-10" onclick="set_radar_month(10)">October</option>
+                                                <option value="11" id="snowvision-radar-select-11" onclick="set_radar_month(11)">November</option>
+                                                <option value="12" id="snowvision-radar-select-12" onclick="set_radar_month(12)">December</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="uk-flex uk-flex-middle">
+                                        <div class="uk-form-controls">
+                                            <select class="uk-select" id="snowvision-radar-select-year">
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="uk-flex uk-flex-middle">
+                                        <button class="uk-button uk-button-default"
+                                                id="snowvision-radar-play-button"
+                                                type="button"
+                                                onclick="radar_play_pause()">
+                                            <i class="fa-solid fa-play" id="snowvision-radar-play-icon"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="uk-flex uk-flex-middle uk-flex-column">
+                                <p>Average monthly snow depth</p>
+                                <div class="radarChart" id="radarChart"></div>
+
+                                <style>
+			         
+			         .legend {
+				     font-family: 'Raleway', sans-serif;
+				     fill:white;
+			         }
+			         
+			         .tooltip {
+				     fill: #333333;
+			         }
+		                </style>
+
+                                <script src="Radial/radarChart.js"></script>	
+		                <script>
+                                 /* Radar chart design created by Nadieh Bremer - VisualCinnamon.com */
+                                 
+			         // Set-Up 
+
+			         var margin = {top: 100, right: 100, bottom: 100, left: 100},
+				     radar_width = Math.min(700, window.innerWidth - 10) - margin.left - margin.right,
+				     radar_height = Math.min(width, window.innerHeight - margin.top - margin.bottom - 20);
+				 
+			         // Draw the Chart 
+
+			         var color = d3.scaleOrdinal()
+				               .range(["#00A0B0"]);
+
+			         var radarChartOptions = {
+			             w: radar_width,
+			             h: radar_height,
+			             margin: margin,
+			             maxValue: 0.5,
+			             levels: 5,
+			             roundStrokes: true,
+			             color: color
+			         };
+			         
+
+                                 let current_radar_play_state = false
+
+                                 let radar_year = start_year,
+                                     radar_month = start_month
+
+                                 let radar_sel_year = document.getElementById("snowvision-radar-select-year")
+                                 let radar_sel_month = document.getElementById("snowvision-radar-select-month")
+                                 let radar_range = document.getElementById("snowvision-radar-range-selector")
+                                 let radar_play_icon = document.getElementById("snowvision-radar-play-icon")
+
+                                 let radar_inverval
+
+                                 for(let i = start_year; i < end_year; ++i) {
+                                     let opt = document.createElement("option")
+                                     opt.setAttribute("onclick", "set_radar_year(" + i + ")")
+                                     opt.setAttribute("id", "snowvision-radar-select-year-" + i)
+                                     opt.value = i
+                                     opt.innerHTML = i
+                                     radar_sel_year.appendChild(opt)
+                                 }
+
+                                 function draw_radar_chart(name) {
+                                     radar_year = start_year
+                                     radar_month = start_month
+                                     set_radar_range_position()
+                                     update_radar_selects()
+                                     document.getElementById("radarChart").innerHTML = ""
+                                     RadarChart(".radarChart", radarChartOptions, name, 12, end_year)
+                                 }
+
+                                 function radar_play_pause() {
+                                     if(current_radar_play_state) {
+                                         current_radar_play_state = false
+
+                                         radar_play_icon.classList.remove("fa-pause")
+                                         radar_play_icon.classList.add("fa-play")
+
+                                         clearInterval(radar_interval)
+                                     } else {
+                                         current_radar_play_state = true
+
+                                         radar_play_icon.classList.remove("fa-play")
+                                         radar_play_icon.classList.add("fa-pause")
+
+                                         radar_interval = setInterval(() => {
+                                             set_radar_range_position()
+                                             update_radar_selects()
+                                             
+                                             createLineNPoints(get_index_from_year_month(radar_year, radar_month))
+                                             
+                                             if (radar_month == 12) {
+                                                 radar_month = 1
+                                                 radar_year += 1
+                                             } else {
+                                                 radar_month += 1
+                                             }
+
+                                             if (year >= end_year)
+                                                 clearInterval(radar_interval)
+                                         }, 150)
+                                     }
+                                 }
+
+                                 function set_radar_range_position() {
+                                     radar_range.value = get_index_from_year_month(radar_year, radar_month)
+                                 }
+
+                                 function update_radar_selects() {
+                                     radar_sel_year.value = radar_year
+                                     radar_sel_month.value = radar_month
+                                 }
+
+                                 function set_radar_year(y) {
+                                     radar_year = y
+                                     set_radar_range_position()
+                                     createLineNPoints(get_index_from_year_month(radar_year, radar_month))
+                                 }
+
+                                 function set_radar_month(m) {
+                                     radar_month = m
+                                     set_radar_range_position()
+                                     createLineNPoints(get_index_from_year_month(radar_year, radar_month))
+                                 }
+
+                                 function update_radar_from_range() {
+                                     let current_index = radar_range.value
+
+                                     let r = get_year_month_from_index(current_index)
+
+                                     radar_year = r[0]
+                                     radar_month = r[1]
+
+                                     update_radar_selects()
+
+                                     createLineNPoints(get_index_from_year_month(radar_year, radar_month))
+                                 }
+		                </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="snowvision-station-comparison-modal" class="uk-modal-full" uk-modal uk-height-viewport>
+            <div class="uk-modal-dialog" style="background: black" uk-overflow-auto>
+                <a class="uk-modal-close-full uk-close-large" style="background: black" type="button" uk-close></a>
+                <div id="snowvision-station-comparison"
+                     class="uk-section uk-flex uk-flex-column"
+                     uk-height-viewport>
+                    <h1 class="uk-width-1-1 uk-text-center"><span id="snowvision-compare-station-1-name">Station Name</span> vs. <span id="snowvision-compare-station-2-name">Station Name</span></h1>
+                    <h4 class="uk-width-1-1 uk-text-center"><span id="snowvision-compare-station-1-elevation">Station Name</span> vs. <span id="snowvision-compare-station-2-elevation">Station Name</span></h4>
+                    <p class="uk-width-1-1 uk-text-center">You are comparing the average monthly snow depth.</p>
+                    <div class="uk-grid-small uk-padding" uk-grid>          
+                        <div class="uk-width-1-1">
+                            <div class="uk-flex uk-flex-middle uk-flex-column">
+                                <div id="line_plot"></div>
+
+                                <script src="Line/line.js"></script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <script>
-         // Simulate an enum somehow .....
-         // Valid values are:
-         //   "height_line",
-         //   "voronoi"
-         let current_state = "voronoi"
+         // Map controls and stuff.
 
-         switch_state()
+         UIkit.modal("#snowvision-loading-modal").show()
+         
+         // False if paused, true if playing.
+         let current_play_state = false
 
-         function switch_state() {
-             const heightline_hide_elements = document.querySelectorAll(".snowvision-hide-heightline")
-             const heightline_visibility_elements = document.querySelectorAll(".snowvision-visibility-heightline")
-             const voronoi_hide_elements = document.querySelectorAll(".snowvision-hide-voronoi")
-             const voronoi_visibility_elements = document.querySelectorAll(".snowvision-visibility-voronoi")
-             
-             if(current_state == "height_line") {
-                 heightline_hide_elements.forEach(e => {
-                     e.setAttribute("hidden", "")
-                 })
+         let year = start_year,
+             month = start_month
 
-                 heightline_visibility_elements.forEach(e => {
-                     e.classList.add("uk-invisible")
-                 })
+         let interval
 
-                 voronoi_hide_elements.forEach(e => {
-                     e.removeAttribute("hidden")
-                 })
+         let sel_year = document.getElementById("snowvision-select-year")
+         let sel_month = document.getElementById("snowvision-select-month")
+         let range = document.getElementById("snowvision-range-selector")
+         let play_icon = document.getElementById("snowvision-voronoi-play-icon")
+         
+         for(let i = start_year; i < end_year; ++i) {
+             let opt = document.createElement("option")
+             opt.setAttribute("onclick", "set_year(" + i + ")")
+             opt.setAttribute("id", "snowvision-select-year-" + i)
+             opt.value = i
+             opt.innerHTML = i
+             sel_year.appendChild(opt)
+         }
 
-                 voronoi_visibility_elements.forEach(e => {
-                     e.classList.remove("uk-invisible")
-                 })
+         function get_year_month_from_index(index) {
+             let year = start_year + Math.floor(index / 12)
+             let month = (index % 12) + 1
 
-                 current_state = "voronoi"
-             } else if (current_state == "voronoi") {
-                 heightline_hide_elements.forEach(e => {
-                     e.removeAttribute("hidden")
-                 })
+             return [year, month]
+         }
 
-                 heightline_visibility_elements.forEach(e => {
-                     e.classList.remove("uk-invisible")
-                 })
+         function get_index_from_year_month(year, month) {
+             return 12 * (year - start_year) + (month - 1)
+         }
 
-                 voronoi_hide_elements.forEach(e => {
-                     e.setAttribute("hidden", "")
-                 })
+         function play_pause() {
+             if (current_play_state) {
+                 // Pause the aniation.
+                 current_play_state = false
+                 
+                 play_icon.classList.remove("fa-pause")
+                 play_icon.classList.add("fa-play")
 
-                 voronoi_visibility_elements.forEach(e => {
-                     e.classList.add("uk-invisible")
-                 })
+                 clearInterval(interval)
+             } else {
+                 current_play_state = true
+                 play_icon.classList.remove("fa-play")
+                 play_icon.classList.add("fa-pause")
+                 
+                 interval = setInterval(() => {
+                     set_range_position()
+                     update_selects()
+                     
+                     fill_voronoi_cells(year, month)
+                     
+                     if (month == 12) {
+                         month = 1
+                         year += 1
+                     } else {
+                         month += 1
+                     }
 
-                 current_state = "height_line"
+                     if (year >= end_year)
+                         clearInterval(interval)
+                 }, 150)
              }
          }
 
-         function open_station_info() {
-             
+         function set_month(m) {
+             month = m
+             set_range_position()
+             fill_voronoi_cells(year, month)
          }
+
+         function set_year(y) {
+             year = y
+             set_range_position()
+             fill_voronoi_cells(year, month)
+         }
+
+         function set_range_position() {
+             range.value = get_index_from_year_month(year, month)
+         }
+
+         function update_from_range() {
+             let current_index = range.value
+
+             let r = get_year_month_from_index(current_index)
+
+             year = r[0]
+             month = r[1]
+
+             update_selects()
+             fill_voronoi_cells(year, month)
+         }
+
+         function update_selects() {
+             sel_year.value = year
+             sel_month.value = month
+         }
+
+         let station_comparison = false
+         let station_comparison_selection = []
+
+         function click_on_station(name) {
+             if(!station_comparison)
+                 open_single_station_view(name)
+             else {
+                 if (station_comparison_selection.length == 0) {
+                     station_comparison_selection.push(name)
+
+                     UIkit.notification({
+                         message: 'Select the second station',
+                         pos: 'top-right',
+                         timeout: 5000
+                     });
+                 } else if(station_comparison_selection.length == 1) {
+                     UIkit.notification.closeAll()
+                     
+                     station_comparison_selection.push(name)
+                     UIkit.modal("#snowvision-station-comparison-modal").show()
+
+                     let data1 = stations_data.find(x => x.Name == station_comparison_selection[0]).data
+                     let data2 = stations_data.find(x => x.Name == station_comparison_selection[1]).data
+
+                     let elevation_1 = data1[0].Elevation
+                     let elevation_2 = data2[0].Elevation
+
+                     document.getElementById("line_plot").innerHTML = ""
+
+                     document.getElementById("snowvision-compare-station-1-name").innerHTML = station_comparison_selection[0].replaceAll("_", " ")
+                     document.getElementById("snowvision-compare-station-2-name").innerHTML = station_comparison_selection[1].replaceAll("_", " ")
+
+                     document.getElementById("snowvision-compare-station-1-elevation").innerHTML = elevation_1 + "m"
+                     document.getElementById("snowvision-compare-station-2-elevation").innerHTML = elevation_2 + "m"
+
+                     draw_double_line(...station_comparison_selection)
+
+                     station_comparison_selection = []
+                     station_comparison = false
+                 }
+             }
+         }
+
+         function open_single_station_view(name) {             
+             draw_bars(name)
+             
+             let data = stations_data.find(x => x.Name == name).data
+
+             draw_radar_chart(name)
+
+             let country = data[0].Provider.split(/_(.*)/s)[0]
+             switch (country) {
+                 case "AT":
+                     country = "Austria"
+                     break;
+                 case "CH":
+                     country = "Switzerland"
+                     break;
+                 case "DE":
+                     country = "Germany"
+                     break;
+                 case "FR":
+                     country = "France"
+                     break;
+                 case "IT":
+                     country = "Italy"
+                     break;
+                 case "SI":
+                     country = "Slovenia"
+                     break;
+             }
+             
+             let provider = data[0].Provider.split(/_(.*)/s)[1]
+
+             let latitude = data[0].Latitude
+             let longitude = data[0].Longitude
+             let elevation = data[0].Elevation
+
+             document.getElementById("snowvision-station-name").innerHTML = name.replaceAll("_", " ")
+
+             document.getElementById("snowvision-country-name").innerHTML = country
+
+             document.getElementById("snowvision-provider-name").innerHTML = provider
+
+             document.getElementById("snowvision-station-latitude").innerHTML = latitude
+
+             document.getElementById("snowvision-station-longitude").innerHTML = longitude
+
+             document.getElementById("snowvision-station-elevation").innerHTML = elevation + "m"
+             
+             UIkit.modal("#snowvision-station-view-modal").show()
+         }
+
+         function start_compare() {
+             if(station_comparison) {
+                 UIkit.notification({
+                     message: 'Aborted station compare',
+                     pos: 'top-right',
+                     timeout: 5000
+                 });
+
+                 station_comparison = false
+                 station_compare_selection = []
+             } else {
+                 station_comparison = true
+
+                 if (station_comparison_selection.length == 0)
+                     UIkit.notification({
+                         message: 'Select the first station',
+                         pos: 'top-right',
+                         timeout: 5000
+                     });
+                 else
+                     UIkit.notification({
+                         message: 'How did we get here?',
+                         status: 'danger',
+                         pos: 'top-right',
+                         timeout: 5000
+                     });
+             }
+         }
+
+         document.addEventListener("loaded_stations", (e) => {
+             UIkit.modal("#snowvision-loading-modal").hide()
+             UIkit.modal("#snowvision-story-modal").show()
+         })
         </script>
     </body>
 </html>

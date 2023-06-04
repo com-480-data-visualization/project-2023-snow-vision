@@ -3,24 +3,11 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/ >
 		<title>Smoothed D3.js Radar Chart</title>
-
-		<!-- Google fonts -->
-		<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
-		<link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
-
 		<!-- D3.js -->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+		<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script> -->
+                <script src="../d3/package/dist/d3.js"></script>
 		
 		<style>
-			body {
-				font-family: 'Open Sans', sans-serif;
-				font-size: 11px;
-				font-weight: 300;
-				fill: #242424;
-				text-align: center;
-				text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;
-				cursor: default;
-			}
 			
 			.legend {
 				font-family: 'Raleway', sans-serif;
@@ -29,6 +16,10 @@
 			
 			.tooltip {
 				fill: #333333;
+			}
+			path {
+				fill: none;
+				stroke: #000;
 			}
 		</style>
 	
@@ -40,7 +31,7 @@
 		<script src="radarChart.js"></script>	
 		<script>
       
-      /* Radar chart design created by Nadieh Bremer - VisualCinnamon.com */
+                 /* Radar chart design created by Nadieh Bremer - VisualCinnamon.com */
       
 			////////////////////////////////////////////////////////////// 
 			//////////////////////// Set-Up ////////////////////////////// 
@@ -51,45 +42,13 @@
 				height = Math.min(width, window.innerHeight - margin.top - margin.bottom - 20);
 					
 			////////////////////////////////////////////////////////////// 
-			////////////////////////// Data ////////////////////////////// 
-			////////////////////////////////////////////////////////////// 
-
-			var data = [
-				[
-				{axis:"January",value:0.22},
-				{axis:"February",value:0.28},
-				{axis:"March",value:0.29},
-				{axis:"April",value:0.17},
-				{axis:"May",value:0.22},
-				{axis:"June",value:0.02},
-				{axis:"July",value:0.21},
-				{axis:"August",value:0.50},
-				{axis:"September",value:0.50},			
-				{axis:"October",value:0.50},			
-				{axis:"November",value:0.50},			
-				{axis:"December",value:0.50},			
-			
-				],[
-				{axis:"January",value:0.12},
-				{axis:"February",value:0.35},
-				{axis:"March",value:0.21},
-				{axis:"April",value:0.48},
-				{axis:"May",value:0.55},
-				{axis:"June",value:0.29},
-				{axis:"July",value:0.26},
-				{axis:"August",value:0.12},
-				{axis:"September",value:0.70},			
-				{axis:"October",value:0.42},			
-				{axis:"November",value:0.35},			
-				{axis:"December",value:0.3},					  ]
-			];
-			////////////////////////////////////////////////////////////// 
 			//////////////////// Draw the Chart ////////////////////////// 
 			////////////////////////////////////////////////////////////// 
 
-			var color = d3.scale.ordinal()
-				.range(["#EDC951","#CC333F","#00A0B0"]);
-				
+			var color = d3.scaleOrdinal()
+				.range(["#00A0B0"]);
+			
+
 			var radarChartOptions = {
 			  w: width,
 			  h: height,
@@ -100,7 +59,10 @@
 			  color: color
 			};
 			//Call function to draw the Radar chart
-			RadarChart(".radarChart", data, radarChartOptions);
+			nameStation = "Aach";
+			endMonth = 1;
+			endYear = 2019;
+			RadarChart(".radarChart", radarChartOptions, nameStation, endMonth, endYear);
 		</script>
 	</body>
 </html>

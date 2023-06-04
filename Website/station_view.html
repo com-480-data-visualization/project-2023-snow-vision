@@ -9,63 +9,11 @@
         <link rel="stylesheet" href="style.css" />
         <script src="uikit/js/uikit.min.js"></script>
         <script src="uikit/js/uikit-icons.min.js"></script>
+
+        <script src="../d3/package/dist/d3.js"></script>
     </head>
 
     <body style="background: black;" class="uk-light">
-        <div id="snowvision-station-view"
-             class="uk-section uk-padding-remove uk-flex uk-flex-column"
-             uk-height-viewport>
-            <h1 class="uk-width-1-1 uk-text-center">Random Station Name</h1>
-            <div class="uk-grid-small uk-grid-match uk-padding" uk-grid>
-                <div class="uk-width-1-2 uk-height-1-1">
-                    <div style="height: 10em" class="uk-flex uk-flex-middle uk-flex-column">
-                        <img class="uk-width-small" src="img/location-162102.svg">
-                        <b>Put a map here that marks the location of the selected station.</b>
-                    </div>
-                </div>
-                
-                <div class="uk-width-1-2">
-                    <table class="uk-table uk-table-divider">
-                        <caption>Station information</caption>
-                        <tbody>
-                            <tr>
-                                <th class="uk-table-shrink">Country</th>
-                                <td class="uk-table-expand">Germany</td>
-                            </tr>
-                            <tr>
-                                <th>Data provider</th>
-                                <td>Deutscher Wetterdienst</td>
-                            </tr>
-                            <tr>
-                                <th >Elevation</th>
-                                <td>350m</td>
-                            </tr>
-                            <tr>
-                                <th>Latitude</th>
-                                <td>12.34°N</td>
-                            </tr>
-                            <tr>
-                                <th>Longitude</th>
-                                <td>43.21°E</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="uk-width-1-2">
-                    <div style="height: 10em" class="uk-flex uk-flex-middle uk-flex-column">
-                        <img class="uk-width-large uk-background-default" src="img/radial-chart.svg">
-                        <b>Put a radial plot here.  One revolution is one year.  Show snow depth measured at <i>this</i> station for each month that data is available for.  We plan to have the plot animated such that the user can follow the line being drawn as time advances.</b>
-                    </div>
-                </div>
-                
-                <div class="uk-width-1-2">
-                    <div style="height: 10em" class="uk-height-1-1 uk-margin-auto-vertical uk-flex uk-flex-middle uk-flex-column snowviz-flex-grow">
-                        <img class="uk-width-large uk-background-default" src="img/efficiency_2x.png">
-                        <b>Put a bar plot here.  Show characteristics measured at <i>this</i> station, either for a selected month (most likely the same month that the radial plot on the left is currently at).</b>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
     </body>
 </html>

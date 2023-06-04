@@ -1,24 +1,40 @@
 # Skeleton for the Snow Vision Website #
 
-This folder contains a skeleton for our visualization about snow depth
-in the European Alps.
+This folder contains our visualization of snow depths in the European
+Alps.  We focus on the time period between 1964 and 2019.
 
-The starting point is [`index.html`](index.html).  From here, the user
-may get to the visualization in
-[`visualization.html](visualization.html`).  By clicking on a station
-in the visualization (currently realized by clicking on a button), the
-user continues to [`station_view.html`](station_view.html).
+To view the website, either head to
+[https://com-480-data-visualization.github.io/project-2023-snow-vision/Website/](https://com-480-data-visualization.github.io/project-2023-snow-vision/Website/)
+or run the website locally by downloading this directory and starting
+a web-server, for example, by running
 
-Furthermore, we include a basic map showing station locations in
-[`Map/map.html`](Map/map.html).  This map will serve as the foundation
-for the Voronoi visualization.  We use a Voronoi chart to draw an area
-around each station which will be colored according to the measured
-snow depth in a selected month.  The folder [`Radial/`](Radial/)
-contains two versions of a radial graph.  We may use these as a
-foundation for creating our own radial graph showing the measured snow
-depth at a selected station over time.  A preview of the website can
-be found at
-[https://com-480-data-visualization.github.io/project-2023-snow-vision/Website/](https://com-480-data-visualization.github.io/project-2023-snow-vision/Website/).
-Please note that some of the files (in particular
-[`Map/map.html`](Map/map.html) and the radial graphs) are not linked
-from the website and must be accessed manually.
+``` python
+python3 -m http.server
+```
+
+You will be greeted with a landing page that contains general
+information about our visualization.  When you are ready, press the
+*go to the visualization* button at the bottom of the page.  This
+loads our interactive map.  Beware that this map displays *a lot* of
+data.  Your browser will need to download roughly 100MB of data.  To
+speed things up, run a local web-server!
+
+Once the data is fully loaded, you will be shown a quick guide on how
+to proceed.  You may return to this guide at any point by pressing the
+help button.  After studying the interactive map, you may click on a
+station to see more information about it, or compare average monthly
+snow depths at different stations by pressing the compare button and
+selecting two stations on the map.
+
+When you are done, you may press the finish button in the top-right
+corner.
+
+Each visualization has its own .js file in its own folder.  The
+visualization.html file loads all these files and bundles the whole
+project into one page.  This is necessary since re-loading the map
+after returning from a station would take a long time and severely
+impact the interactivity.
+
+All our implementations are implemented using D3.js.  We use UIkit as
+our CSS framework and we make use of icons from the FontAwesome icon
+font.

@@ -7,7 +7,7 @@
 | Simone Roznowicz    | 342864 |
 
 [Milestone 1](#milestone-1-7th-april-5pm) • [Milestone
-2](#milestone-2-7th-may-5pm) • [Milestone 3](#milestone-3)
+2](#milestone-2-7th-may-5pm) • [Milestone 3](#milestone-3-4th-june-5pm)
 
 Unfortunately, our dataset is too large to be uploaded on GitHub.  We
 therefore provide it
@@ -210,6 +210,11 @@ A preview of the current state of the site is available at
 
 **80% of the final grade**
 
+For our visualization, please refer to the
+[`Readme`](Website/Readme.md) in [`Website/`](Website/).
+
+For our process book, please refer to
+[`ProcessBook.pdf`](ProcessBook.pdf).
 
 ## Late policy
 
