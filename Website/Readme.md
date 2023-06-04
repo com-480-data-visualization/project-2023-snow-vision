@@ -3,10 +3,8 @@
 This folder contains our visualization of snow depths in the European
 Alps.  We focus on the time period between 1964 and 2019.
 
-To view the website, either head to
-[https://com-480-data-visualization.github.io/project-2023-snow-vision/Website/](https://com-480-data-visualization.github.io/project-2023-snow-vision/Website/)
-or run the website locally by downloading this directory and starting
-a web-server, for example, by running
+To view the website, please run it locally by downloading this
+directory and starting a web-server, for example, by running
 
 ``` python
 python3 -m http.server
@@ -16,8 +14,7 @@ You will be greeted with a landing page that contains general
 information about our visualization.  When you are ready, press the
 *go to the visualization* button at the bottom of the page.  This
 loads our interactive map.  Beware that this map displays *a lot* of
-data.  Your browser will need to download roughly 100MB of data.  To
-speed things up, run a local web-server!
+data.  Your browser will need to load roughly 100MB of data.
 
 Once the data is fully loaded, you will be shown a quick guide on how
 to proceed.  You may return to this guide at any point by pressing the
